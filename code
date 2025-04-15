@@ -1,0 +1,35 @@
+define mc = Character("[player_name]", color="#AA2F23")
+define m = Character("Marlene Carter", color="#24552E")
+define d = Character("Desmond Miller", color="#6EC8DC")
+
+default Marlene_Carter_points = 0
+default Desmond_Miller_points = 0
+  
+image coiso = "coiso.png"
+
+
+screen affection_bar(name, points):
+    frame:
+    padding = (10, 10, 10, 10)
+        xalign 0.02
+        yalign 0.05
+        background "#2228"
+        
+
+        vbox:
+            text "[name] 🧡" color "#ff6699" size 20
+
+            bar:
+                value points
+                range 5
+                xmaximum 150
+
+
+
+    show coiso  # Show the image
+
+    show screen affection_bar("Marlene Carter", Marlene_Carter_points)  # Show your custom screen
+
+    m "Welcome to the game!"
+
+    return
