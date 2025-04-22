@@ -10,7 +10,6 @@ image coiso = "coiso.png"
 
 screen affection_bar(name, points):
     frame:
-    padding = (10, 10, 10, 10)
         xalign 0.02
         yalign 0.05
         background "#2228"
@@ -26,7 +25,8 @@ screen affection_bar(name, points):
 
 
 
-    show coiso  # Show the image
+    
+show coiso 
 
     show screen affection_bar("Marlene Carter", Marlene_Carter_points)  # Show your custom screen
 
