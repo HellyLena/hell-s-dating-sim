@@ -1,4 +1,6 @@
 # hell-s-dating-sim
-anyway
 
-this will be a dating sim focused on my original characters. that's it
+Um simulador de encontro!!
+
+- Dating sim com personagens originais e uma história sangrenta
+- 
