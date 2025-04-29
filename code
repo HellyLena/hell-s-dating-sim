@@ -1,11 +1,7 @@
-define mc = Character("[player_name]", color="#AA2F23")
-define m = Character("Marlene Carter", color="#24552E")
-define d = Character("Desmond Miller", color="#6EC8DC")
+define mc = Character("[player_name]", color="#bd5c53")
+define m = Character("Marlene", color="#36984a")
 
-default Marlene_Carter_points = 0
-default Desmond_Miller_points = 0
-  
-image coiso = "coiso.png"
+default Marlene_points = 3  # Começa com 3/5 de vida
 
 
 screen affection_bar(name, points):
@@ -13,21 +9,50 @@ screen affection_bar(name, points):
         xalign 0.02
         yalign 0.05
         background "#2228"
-        
+        padding (10, 10)
 
         vbox:
+            spacing 5
             text "[name] 🧡" color "#ff6699" size 20
 
             bar:
-                value points
-                range 5
+                value VariableValue(points, 5)
                 xmaximum 150
 
+label start:
 
+    $ player_name = renpy.input("What's your name?")
+    menu:
+        "What are your pronouns?"
+        "He/Him":
+            $ pronoun_subject = "he"
+            $ pronoun_object = "him"
+            $ pronoun_possessive = "his"
+            $ pronoun_possessive_adj = "his"
+            $ pronoun_reflexive = "himself"
+            $ gender = "male"
+        "She/Her":
+            $ pronoun_subject = "she"
+            $ pronoun_object = "her"
+            $ pronoun_possessive = "hers"
+            $ pronoun_possessive_adj = "her"
+            $ pronoun_reflexive = "herself"
+            $ gender = "female"
+        "They/Them":
+            $ pronoun_subject = "they"
+            $ pronoun_object = "them"
+            $ pronoun_possessive = "theirs"
+            $ pronoun_possessive_adj = "their"
+            $ pronoun_reflexive = "themself"
+            $ gender = "nonbinary"
 
-    
-show coiso 
+    "It's your first day at a new job in a new city."
+    "You felt really anxious, but what could go wrong, right?"
+    "You were walking to the building when..."
 
+    "You bumped right into someone!!"
+    show haha
+    m "Ugh! Don't you look where you're going, idiot??"
     show screen affection_bar("Marlene Carter", Marlene_Carter_points)  # Show your custom screen
 
     m "Welcome to the game!"
