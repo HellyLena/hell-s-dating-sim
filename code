@@ -1,14 +1,13 @@
 define mc = Character("[player_name]", color="#bd5c53")
 define m = Character("Marlene", color="#36984a")
 
-default Marlene_points = 3  # Começa com 3/5 de vida
-
+default Marlene_points = 0
 
 screen affection_bar(name, points):
     frame:
         xalign 0.02
         yalign 0.05
-        background "#2228"
+        background "#222222"  # Corrigido para uma cor mais padrão
         padding (10, 10)
 
         vbox:
@@ -16,12 +15,11 @@ screen affection_bar(name, points):
             text "[name] 🧡" color "#ff6699" size 20
 
             bar:
-                value VariableValue(points, 5)
+                value VariableValue(points, 5)  # 'points' é uma string
                 xmaximum 150
 
 label start:
-
-    $ player_name = renpy.input("What's your name?")
+    $ player_name = renpy.input("What's your name?", default="Stranger").strip()
     menu:
         "What are your pronouns?"
         "He/Him":
@@ -46,15 +44,164 @@ label start:
             $ pronoun_reflexive = "themself"
             $ gender = "nonbinary"
 
+    #show cenário
     "It's your first day at a new job in a new city."
     "You felt really anxious, but what could go wrong, right?"
     "You were walking to the building when..."
-
     "You bumped right into someone!!"
-    show haha
-    m "Ugh! Don't you look where you're going, idiot??"
-    show screen affection_bar("Marlene Carter", Marlene_Carter_points)  # Show your custom screen
+    show screen affection_bar("Marlene", "Marlene_points")
+    show marlene talking
+    m "Ugh! Don't you look where you're going?!"
+    menu:
+        "Sorry, I should be paying more attention.":
+            m "Yeah, you really should."
+            $ Marlene_points += 1
+            $ Marlene_points = min(Marlene_points, 1)
 
-    m "Welcome to the game!"
+        "You're the one running like crazy!":
+            show marlene angry talking
+            m "WHAT?! ME? IT WAS YOUR FAULT."
+            $ Marlene_points -= 1
+            $ Marlene_points = max(Marlene_points, 0)
+        
+        "Ignore her":
+            show marlene normal
+            m "..."
+            $ Marlene_points = Marlene_points
+   
+    show marlene talking
+    m "Anyway, I don't have time for that."
+    hide marlene normal
+    hide screen affection_bar
+
+    "After that, the woman just leaves..."
+    mc "Gods, what a weirdo."
+    "You decide to ignore all that and just go to work."
+    #show cenário
+    "Once inside, you walk to your table, only to find out that..."
+    show marlene normal
+    show screen affection_bar("Marlene", "Marlene_points")
+    "The woman who ran into you a few moments ago also works here..."
+    show marlene talking
+    m "Ugh... You."
+    show marlene normal
+    "She doesn't seen really happy about it."
+    mc "Heey, you..."
+    menu:
+        "If I didn't knew any better, I'd call this fate.":
+            m "Very funny."
+            $ Marlene_points -= 1
+
+        "I'm sorry about earlier...":
+            m "It's okay. I'm sorry too, I'm not in a good mood today."
+            $ Marlene_points += 1
+
+        "....":
+            m "...?"
+            $ Marlene_points = Marlene_points
+    
+    show marlene talking
+    m "Look, let's not think about earlier. This is a work place, we don't need to interact or anything."
+    show marlene normal
+    "She turns away and just starts working, completely ignoring your existence."
+    "How charming."
+
+    menu:
+        "What do you do now?"
+
+        "Ask for her name":
+            mc "So... I'm [player_name], and how do they call you, miss?"
+            m "...Marlene Carter."
+            $ Marlene_points += 2
+
+            if "Ask for her name":
+                mc "That's a pretty name."
+                m "Thank you. Yours is nice too."
+
+            else:
+                "Nothing really happens..."
+            
+        "Try to flirt":
+            mc "God, you're mean... I like that."
+            m "And you're... Not good at that."
+            $ Marlene_points -= 2
+
+            if "Try to flirt":
+                mc "Oh... Sorry."
+
+            else:
+                "Nothing really happens..."
+
+        "Ignore her too":
+            mc "...."
+                
+            if "Ignore her too":
+                "Nothing really happens..."
+    
+    "The hours pass and your work shift is finally over..."
+    menu:
+        "Should you say something to her?"
+
+        "Ask her out":
+            mc "So... What about I pay you a coffee as an apology?"
+
+            if Marlene_points > 0:
+                show marlene talking
+                m "Yeah, why not..."
+                hide marlene talking
+                #mudar cenário
+                "You both walk to a nearby café. The place is cozy and smells great."
+                show marlene happy
+                m "God, I love coffee..."
+                m "Guess you're not as insufferable as I thought."
+
+                menu:
+                    "You thought I was insufferable?!":
+                        m "Hah... I did actually."
+                        m "It's nice to be wrong sometimes."
+
+                    "You're not bad yourself.":
+                        m "Good to know..."
+                        $ Marlene_points += 1
+
+                    "Well, I still think you're annoying.":
+                        show marlene talking
+                        m "Then why invite me here at all?"
+                        show marlene normal
+                        $ Marlene_points -= 1
+
+                mc "Well, let's order?"
+                show marlene happy
+                "Marlene smiles and nods."
+                "You call for the waitress and in a few seconds she appears."
+                "Marlene orders a macchiato..."
+            
+                menu:
+                    "What will you order?"
+                    
+                    "The same as hers":
+                        show marlene normal
+                        "Marlene gives you a frown."
+
+                    "Regular coffee":
+                        show marlene normal
+                        "She doesn't seen impressed"
+
+                    "Espresso":
+                        show marlene happy
+                        "Marlene just smiles to you."
+
+                "The waitress leaves to get your orders, leaving you and Marlene alone again."
+
+            else:
+                show marlene talking
+                m "Uh, why would I go out with you?"
+                hide marlene talking
+                "She just went home..."
+                "You're a really bad flirt."
+        
+        "Just go home":
+            hide marlene normal
+            "Guess you'll die alone."
 
     return
