@@ -15,7 +15,7 @@ screen affection_bar(name, points):
             text "[name] 🧡" color "#ff6699" size 20
 
             bar:
-                value VariableValue(points, 5)  # 'points' é uma string
+                value VariableValue(points, 10)
                 xmaximum 150
 
 label start:
@@ -44,7 +44,7 @@ label start:
             $ pronoun_reflexive = "themself"
             $ gender = "nonbinary"
 
-    #show cenário
+    show cidade
     "It's your first day at a new job in a new city."
     "You felt really anxious, but what could go wrong, right?"
     "You were walking to the building when..."
@@ -77,7 +77,7 @@ label start:
     "After that, the woman just leaves..."
     mc "Gods, what a weirdo."
     "You decide to ignore all that and just go to work."
-    #show cenário
+    show office
     "Once inside, you walk to your table, only to find out that..."
     show marlene normal
     show screen affection_bar("Marlene", "Marlene_points")
@@ -111,12 +111,16 @@ label start:
 
         "Ask for her name":
             mc "So... I'm [player_name], and how do they call you, miss?"
+            show marlene happy talking
             m "...Marlene Carter."
             $ Marlene_points += 2
 
             if "Ask for her name":
+                show marlene happy
                 mc "That's a pretty name."
+                show marlene happy talking
                 m "Thank you. Yours is nice too."
+                show marlene normal
 
             else:
                 "Nothing really happens..."
@@ -145,24 +149,28 @@ label start:
         "Ask her out":
             mc "So... What about I pay you a coffee as an apology?"
 
-            if Marlene_points > 0:
+            if Marlene_points > 2:
                 show marlene talking
                 m "Yeah, why not..."
                 hide marlene talking
-                #mudar cenário
+                show cafe 
                 "You both walk to a nearby café. The place is cozy and smells great."
-                show marlene happy
+                show marlene happy talking
                 m "God, I love coffee..."
+                show marlene smirk
                 m "Guess you're not as insufferable as I thought."
 
                 menu:
                     "You thought I was insufferable?!":
+                        show marlene smirk
                         m "Hah... I did actually."
                         m "It's nice to be wrong sometimes."
 
                     "You're not bad yourself.":
+                        show marlene happy talking
                         m "Good to know..."
                         $ Marlene_points += 1
+                        show marlene happy
 
                     "Well, I still think you're annoying.":
                         show marlene talking
@@ -191,7 +199,47 @@ label start:
                         show marlene happy
                         "Marlene just smiles to you."
 
-                "The waitress leaves to get your orders, leaving you and Marlene alone again."
+                "The waitress leaves to get your orders and in a few minutes she's back."
+                show marlene happy talking
+                m "Gods, this coffee is good!"
+                m "What do you think?"
+                show marlene happy
+
+                menu: 
+                    "I like it":
+                        $ Marlene_points += 1
+
+                    "It's not that good":
+                        show marlene talking
+                        m "Oh, okay..."
+
+                    "It tastes terrible":
+                        show marlene talking
+                        m "Why did you even bring me here?..."
+                        $ Marlene_points =- 3
+                show marlene smirk
+                "time passes, you both talk and everything is great."
+                "now is time to go home."
+                show marlene happy talking
+                m "Well, goodbye then. See you tomorrow..."
+
+                menu:
+                    "She's leaving! What do you do now??"
+
+                    "Kiss her":
+                        if Marlene_points > 3:
+                            show marlene smirk
+                            m "Oh! Wow... That is a good surprise..."
+                            hide marlene happy
+                            "Good job! Thanks for playing!"
+
+                        else:
+                            show marlene angry talking
+                            m "WHAT ARE YOU DOING?? GET OFF ME!"
+                            hide marlene angry talking
+                            "She leaves..."
+                            "Well, guess you'll die alone."
+                
 
             else:
                 show marlene talking
@@ -199,6 +247,12 @@ label start:
                 hide marlene talking
                 "She just went home..."
                 "You're a really bad flirt."
+        
+        "Just go home":
+            hide marlene normal
+            "Guess you'll die alone."
+
+    return
         
         "Just go home":
             hide marlene normal
